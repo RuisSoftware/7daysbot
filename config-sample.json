@@ -1,0 +1,16 @@
+{
+  "consolelogging": false,
+  "game": {
+    "BloodMoonFrequency": "7"
+  },
+  "discord": {
+    "token": "myvalidbottoken",
+    "channel": "discordchannelid",
+    "prefix": "!"
+  },
+  "telnet": {
+    "ip": "localhost",
+    "port": "8081",
+    "password": "securetelnetpassword"
+  }
+}
