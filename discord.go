@@ -16,7 +16,6 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	// Ignore all messages created by the bot itself
-	// This isn't required in this specific example but it's a good practice.
 	if m.Author.ID == s.State.User.ID {
 		return
 	}
@@ -35,7 +34,7 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	// If the message is "pong" reply with "Ping!"
+	// Info command
 	if content == "info" {
 		commands := config.Discord.Prefix + "info"
 		commands += ", " + config.Discord.Prefix + "time"
@@ -44,11 +43,13 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	// Current ingame time
 	if content == "time" {
 		sendTelnet("gt")
 		return
 	}
 
+	// Players currently in game
 	if content == "players" {
 		sendTelnet("lp")
 		return
