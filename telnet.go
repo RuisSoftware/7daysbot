@@ -23,10 +23,10 @@ var (
 
 type internalBotCaller struct{}
 
-func (caller internalBotCaller) CallTELNET(ctx telnet.Context, w telnet.Writer, r telnet.Reader) {
+func (caller internalBotCaller) CallTELNET(ctxt telnet.Context, w telnet.Writer, r telnet.Reader) {
 	writer = w
 	reader = r
-	ctx = ctx
+	ctx = ctxt
 	botCallerCallTELNET(os.Stdin, os.Stdout, os.Stderr)
 }
 
@@ -56,8 +56,19 @@ func handleOutput(line string) {
 		return
 	}
 
+	// Handle no players in game
+	matched, err := regexp.MatchString(` Total of 0 in the game`, line)
+	if nil != err {
+		return
+	}
+	if matched {
+		message := " No players currently in game."
+		sendDiscordMessage(message)
+		return
+	}
+
 	// Handle Log in
-	matched, err := regexp.MatchString(` INF PlayerSpawnedInWorld \(`, line)
+	matched, err = regexp.MatchString(` INF PlayerSpawnedInWorld \(`, line)
 	if nil != err {
 		return
 	}
