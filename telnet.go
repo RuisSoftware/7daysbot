@@ -109,29 +109,20 @@ func handleOutput(line string) {
 		return
 	}
 
-	// Handle Log in
-	matched, err = regexp.MatchString(` INF PlayerSpawnedInWorld \(`, line)
+	// Handle all game messages. Covers login, logout, player deaths, etc.
+	matched, err = regexp.MatchString(` INF GMSG:`, line)
 	if nil != err {
 		return
 	}
 	if matched {
-		substr := strings.Split(line, ",")[6]
-		pName := strings.TrimSuffix(strings.TrimSpace(substr[13:]), "'")
-		message := pName + " has logged on"
-		sendDiscordMessage(message)
-		return
-	}
+		fmt.Println("test")
+		substr := strings.SplitAfterN(line[30:], ":", 2)[1]
+		substr = strings.TrimLeft(substr, " ")
 
-	// Handle log out
-	matched, err = regexp.MatchString(` INF Player disconnected:`, line)
-	if nil != err {
-		return
-	}
-	if matched {
-		substr := strings.Split(line, ",")[3]
-		pName := strings.TrimSuffix(strings.TrimSpace(substr[13:]), "'")
-		message := pName + " has logged off"
-		sendDiscordMessage(message)
+		// remove quotes from playername
+		substr = strings.Replace(substr, "'", "", 2)
+
+		sendDiscordMessage(substr)
 		return
 	}
 
