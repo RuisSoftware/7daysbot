@@ -1,7 +1,8 @@
 {
   "consolelogging": false,
   "game": {
-    "BloodMoonFrequency": "7"
+    "BloodMoonFrequency": 7,
+    "DayLightLength": 18
   },
   "discord": {
     "token": "myvalidbottoken",

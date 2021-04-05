@@ -7,6 +7,7 @@ import (
 	"github.com/reiver/go-oi"
 	"github.com/reiver/go-telnet"
 	"io"
+	"math"
 	"os"
 	"regexp"
 	"strconv"
@@ -42,8 +43,49 @@ func handleOutput(line string) {
 		currentDay, _ := strconv.Atoi(currentDayString)
 		timeToBloodMoon := config.Game.BloodMoonFrequency - (currentDay % config.Game.BloodMoonFrequency)
 		sendDiscordMessage(line)
-		bloodMoonMessage := strconv.FormatInt(int64(timeToBloodMoon), 10) + " day(s) until blood moon."
-		sendDiscordMessage(bloodMoonMessage)
+		bloodMoonMessage := ""
+
+		if timeToBloodMoon == 7 {
+			currentHour := strings.TrimLeft(strings.Split(line, ",")[1], " ")[0:2]
+			currentHourInt, _ := strconv.Atoi(currentHour)
+
+			currentMinute := strings.TrimLeft(strings.Split(line, ",")[1], " ")[3:5]
+			currentMinuteInt, _ := strconv.Atoi(currentMinute)
+
+			gameTime := time.Date(2000, 1, 1, currentHourInt, currentMinuteInt, 0, 0, time.UTC)
+			hordeTime := time.Date(2000, 1, 1, 22, 0, 0, 0, time.UTC)
+
+			timeToHorde := hordeTime.Sub(gameTime)
+
+			if timeToHorde > 0 {
+				bloodMoonMessage = fmt.Sprintf("%d hours and %d minutes until blood moon begins", int64(timeToHorde.Hours()), int64(math.Mod(timeToHorde.Minutes(), 60)))
+
+			} else {
+				bloodMoonMessage = "Blood Moon is currently Active!"
+			}
+
+			sendDiscordMessage(bloodMoonMessage)
+			return
+		}
+
+		if timeToBloodMoon == 1 { // should be 1
+			currentHour := strings.TrimLeft(strings.Split(line, ",")[1], " ")[0:2]
+			currentHourInt, _ := strconv.Atoi(currentHour)
+
+			dawnTime := 24 - config.Game.DayLightLength
+
+			if currentHourInt < dawnTime {
+				sendDiscordMessage("Blood Moon is currently Active!")
+				return
+			}
+		}
+
+		if timeToBloodMoon > 0 { // Blood moon isnt current day or happening
+			bloodMoonMessage = strconv.FormatInt(int64(timeToBloodMoon), 10) + " day(s) until blood moon."
+			sendDiscordMessage(bloodMoonMessage)
+			return
+		}
+
 		return
 	}
 
