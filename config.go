@@ -15,7 +15,8 @@ type Configuration struct {
 }
 
 type Game struct {
-	BloodMoonFrequency int `json:"bloodmoonfrequency"`
+	BloodMoonFrequency int `json:"BloodMoonFrequency"`
+	DayLightLength     int `json:"DayLightLength"`
 }
 
 type Discord struct {
