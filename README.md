@@ -24,7 +24,9 @@ The following commands are supported by the bot:
 
 # Configuration
 - consolelogging : Log telnet data to console. NOTE: This will expose your telnet password to the console.
-- bloodmoonfrequency : Number of days between blood moons. This should match the BloodMoonFrequency setting in your server configuration.
+- Game
+    - bloodmoonfrequency : Number of days between blood moons. This should match the BloodMoonFrequency setting in your server configuration.
+    - DayLightLength : Should match setting of same name in server config.ini. How many hours of daylight per day.
 - Discord
     - token : Discord Bot token
     - channel : Discord channel ID for bot to be linked to (Right click on channel in discord and copy ID to get the correct ID)
