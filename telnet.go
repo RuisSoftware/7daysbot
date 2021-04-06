@@ -115,7 +115,6 @@ func handleOutput(line string) {
 		return
 	}
 	if matched {
-		fmt.Println("test")
 		substr := strings.SplitAfterN(line[30:], ":", 2)[1]
 		substr = strings.TrimLeft(substr, " ")
 
